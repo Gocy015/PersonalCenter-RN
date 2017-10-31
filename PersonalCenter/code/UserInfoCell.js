@@ -7,6 +7,8 @@ import {
     TouchableHighlight
 } from 'react-native';
 
+import UIUtils from './UIUtils'
+
 export default class UserInfoCell extends Component {
     userData = {}
     constructor(props) {
@@ -25,40 +27,13 @@ export default class UserInfoCell extends Component {
                         <Image style={styles.headerArrow} source={require('../resources/rightArrow.png')} />
                     </TouchableHighlight>
                 </View>
-                {this._seperator(-1, 1, 0, 'row')}
+                {UIUtils.seperator(-1, 1, 0, 'row')}
                 <View style={styles.lowerContainer}>
                     {this._infoView(22, '关注', true)}
                     {this._infoView(6, '粉丝', true)}
                     {this._infoView(23, "动态", false)}
                 </View>
             </View >
-        );
-    }
-
-    _seperator(width, height, padding, direction) {
-        var commonStyle = {
-            backgroundColor: 'rgba(218,216,217,0.5)',
-            // padding: 5
-        }
-        if (width > 0) {
-            commonStyle.width = width;
-        }
-        if (height > 0) {
-            commonStyle.height = height;
-        }
-
-        if (direction == 'row') {
-            commonStyle.marginLeft = padding;
-            commonStyle.marginRight = padding;
-        } else if (direction == 'column') {
-            commonStyle.marginTop = padding;
-            commonStyle.marginBottom = padding;
-        } else {
-            return null;
-        }
-        return (
-            <View style={commonStyle}>
-            </View>
         );
     }
 
@@ -72,7 +47,7 @@ export default class UserInfoCell extends Component {
                     <Text style={styles.userInfoTitle}>
                         {title}</Text>
                 </View>
-                {needSeperator ? this._seperator(1, -1, 10, 'column') : null}
+                {needSeperator ? UIUtils.seperator(1, -1, 10, 'column') : null}
             </View>
         );
     }

@@ -7,6 +7,8 @@ import {
     Animated
 } from 'react-native'
 
+import UIUtils from './UIUtils'
+
 export default class DailyMissionCell extends Component {
 
     constructor(props) {
@@ -14,7 +16,7 @@ export default class DailyMissionCell extends Component {
         this.state = {
             missions: props.missions ? props.missions : [],
         }
-        this._resetAnimations();
+        // this._resetAnimations();
     }
 
     render() {
@@ -26,15 +28,21 @@ export default class DailyMissionCell extends Component {
         return (
             <Animated.View style={styles.mainContainer}>
                 <View style={styles.missionImageContainer}>
+                    <Image style={styles.missionImage} source={require('../resources/me_task_icon.png')} />
                 </View>
+
+                {UIUtils.seperator(1, -1, 12, 'column')}
                 <View style={styles.missionDetailContainer}>
                     <View style={styles.missionProgressContainer}>
                         {missionProgressView}
                     </View>
                     <View style={styles.missionImageContainer}>
+                        <Image style={styles.prizeImage} source={require('../resources/me_Prize_icon.png')} />
                     </View>
                 </View>
+                {UIUtils.seperator(1, -1, 12, 'column')}
                 <View style={styles.missionImageContainer}>
+                    <Image style={styles.missionImage} source={require('../resources/me_shop_icon.png')} />
                 </View>
             </Animated.View>
         );
@@ -47,9 +55,21 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     missionImageContainer: {
-        backgroundColor: "#888888",
         // width: auto
         flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    prizeImage: {
+        width: '55%',
+        height: '55%',
+        resizeMode: 'contain'
+    },
+    missionImage: {
+        // flex: 1,
+        width: '65%',
+        height: '65%',
+        resizeMode: 'contain'
     },
     missionDetailContainer: {
         flexDirection: 'row',
@@ -149,8 +169,7 @@ class MissionProgressAnimatedView extends Component {
                         });
                     }}>
                     <Text style={missionStyles.singleMissionText}>{missionOne.name}</Text>
-                    <View style={missionStyles.singleMissionProgressBar}>
-                    </View>
+                    {this._missionProgressBar(missionOne.progress)}
                 </Animated.View >
             )
         }
@@ -160,13 +179,25 @@ class MissionProgressAnimatedView extends Component {
             this.recycleMissionViewTwo = (
                 <Animated.View style={[missionStyles.singleMissionContainer, { transform: [{ translateY: this.state.missionTwoAnimatedY }] }]}>
                     <Text style={missionStyles.singleMissionText}>{missionTwo.name}</Text>
-                    <View style={missionStyles.singleMissionProgressBar}>
-                    </View>
+                    {this._missionProgressBar(missionTwo.progress)}
                 </Animated.View >
             )
         }
+    }
 
+    _missionProgressBar(progress) {
+        var p = progress * 100;
+        p = Math.min(100, p);
+        p = Math.max(p, 0);
+        return (
+            <View style={{ width: '100%' }}>
+                <View style={missionStyles.singleMissionProgressBar}>
+                    <View style={[missionStyles.singleMissionProgressBar, { marginRight: 0, marginLeft: 0, backgroundColor: '#ffdd00', width: p + '%' }]}>
+                    </View>
+                </View>
 
+            </View>
+        );
     }
 
     _setupAnimationValues() {
@@ -222,7 +253,7 @@ const missionStyles = StyleSheet.create({
     },
     singleMissionContainer: {
         flex: 1,
-        backgroundColor: '#ffdd00',
+        // backgroundColor: '#ffdd00',
         flexDirection: 'column',
         justifyContent: 'center',
         height: '100%',
@@ -230,11 +261,15 @@ const missionStyles = StyleSheet.create({
         position: 'absolute' // 
     },
     singleMissionText: {
-
+        fontSize: 16,
+        paddingBottom: 6,
+        marginLeft: 16
     },
     singleMissionProgressBar: {
-        backgroundColor: '#666666',
-        // flex: 1,
-        height: 10
+        backgroundColor: '#dadee5',
+        height: 10,
+        marginLeft: 16,
+        marginRight: 16,
+        borderRadius: 6
     }
 });

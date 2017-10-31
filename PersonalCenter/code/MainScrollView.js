@@ -98,8 +98,8 @@ class GridView extends Component {
                 <View style={styles.dailyMissionCell}>
                     <DailyMissionCell missions={[
                         { name: '日常任务', progress: 0.3 },
-                        { name: '月度壕友成就', progress: 0.0 },
-                        { name: '刷飞机才是壕', progress: 0.9 },
+                        { name: '月度壕友成就', progress: 1.0 },
+                        { name: '刷飞机才是壕', progress: 0.75 },
                     ]} />
                 </View>
             );
@@ -108,7 +108,10 @@ class GridView extends Component {
             <TouchableHighlight onPress={() => self._pressItem(itemID)} underlayColor='rgba(0,0,0,0)' >
                 <View>
                     <View style={styles.infoCell}>
-                        <Image style={styles.thumb} source={imgSource} />
+                        <View style={styles.infoCellThumbContainer}>
+                            <Image style={styles.infoCellThumb} source={imgSource} />
+                            {itemNum == 3 ? <Text style={styles.infoCellTipsText}>22</Text> : null}
+                        </View>
                         <Text style={styles.text}>
                             {itemData}
                         </Text>
@@ -157,22 +160,39 @@ var styles = StyleSheet.create({
     },
     infoCell: {
         justifyContent: 'center',
-        padding: 5,
         marginRight: itemSpacing,
         width: itemWidth,
         height: 110,
         backgroundColor: '#F6F6F6',
         alignItems: 'center',
         borderWidth: 0.5,
-        // borderRadius: 5,
         borderColor: 'rgba(218,216,217,0.5)'
     },
-    thumb: {
-        width: 64,
-        height: 64
+    infoCellThumbContainer: {
+        width: 60,
+        height: 44,
+        // backgroundColor: '#ffdd00',
+    },
+    infoCellThumb: {
+        width: 44,
+        height: 44,
+        alignSelf: 'center'
+    },
+    infoCellTipsText: {
+        backgroundColor: 'red',
+        color: 'white',
+        paddingLeft: 3,
+        paddingRight: 3,
+        fontSize: 10,
+        borderRadius: 7,
+        height: 14,
+        overflow: 'hidden',
+        // alignSelf: 'flex-end',
+        position: 'absolute',
+        // marginRight: 2, // this is not working when alignSelf is flex
+        right: 2,
     },
     text: {
-        flex: 1,
         marginTop: 5,
         fontWeight: 'bold'
     }

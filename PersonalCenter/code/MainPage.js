@@ -79,12 +79,12 @@ const styles = StyleSheet.create({
         width: 22,
         height: 22,
         // padding: 32
-        marginRight: 8,
+        marginRight: 14,
         resizeMode: 'contain'
     },
     rightItemTextButton: {
         fontSize: 16,
-        marginRight: 8
+        marginRight: 14
     },
 
 });
