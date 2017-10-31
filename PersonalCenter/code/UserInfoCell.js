@@ -4,12 +4,12 @@ import {
     Image,
     Text,
     StyleSheet,
-    Button
+    TouchableHighlight
 } from 'react-native';
 
 export default class UserInfoCell extends Component {
     userData = {}
-    constructor(props){
+    constructor(props) {
         super(props);
         this.userData = props
     }
@@ -19,38 +19,17 @@ export default class UserInfoCell extends Component {
                 <View style={styles.upperContainer}>
                     <View style={styles.headerContainer}>
                         <Image source={this.userData.headerUrl} style={styles.headerImage} />
-                        <Text>{this.userData.userName}</Text>
+                        <Text style={styles.userName}>{this.userData.userName}</Text>
                     </View>
-                    <Button style={styles.detailButton} title=">" onPress={() => { }} />
+                    <TouchableHighlight>
+                        <Image style={styles.headerArrow} source={require('../resources/rightArrow.png')} />
+                    </TouchableHighlight>
                 </View>
                 {this._seperator(-1, 1, 0, 'row')}
                 <View style={styles.lowerContainer}>
-                    <View style={styles.infoItemContainer}>
-                        <View style={styles.infoContainer}>
-                            <Text style={styles.userInfoValue}>
-                                18</Text>
-                            <Text style={styles.userInfoTitle}>
-                                关注</Text>
-                        </View>
-                        {this._seperator(1, -1, 2, 'column')}
-                    </View>
-                    <View style={styles.infoItemContainer}>
-                        <View style={styles.infoContainer}>
-                            <Text style={styles.userInfoValue}>
-                                6</Text>
-                            <Text style={styles.userInfoTitle}>
-                                粉丝</Text>
-                        </View>
-                        {this._seperator(1, -1, 2, 'column')}
-                   </View>
-                   <View style={styles.infoItemContainer}>
-                    <View style={styles.infoContainer}>
-                        <Text style={styles.userInfoValue}>
-                            23</Text>
-                        <Text style={styles.userInfoTitle}>
-                            动态</Text>
-                    </View>
-                 </View>
+                    {this._infoView(22, '关注', true)}
+                    {this._infoView(6, '粉丝', true)}
+                    {this._infoView(23, "动态", false)}
                 </View>
             </View >
         );
@@ -82,6 +61,21 @@ export default class UserInfoCell extends Component {
             </View>
         );
     }
+
+    _infoView(value, title, needSeperator) {
+
+        return (
+            <View style={styles.infoItemContainer}>
+                <View style={styles.infoContainer}>
+                    <Text style={styles.userInfoValue}>
+                        {value}</Text>
+                    <Text style={styles.userInfoTitle}>
+                        {title}</Text>
+                </View>
+                {needSeperator ? this._seperator(1, -1, 10, 'column') : null}
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -107,31 +101,46 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         marginRight: 10,
-        borderRadius:35
+        borderRadius: 35
+    },
+    userName: {
+        fontSize: 16,
+        paddingBottom: 20
+    },
+    headerArrow: {
+        width: 24,
+        height: 16,
+        resizeMode: 'contain'
     },
     lowerContainer: {
         // flex: 1,
-        marginTop: 10,
+        // paddingTop: 10,
         flexDirection: 'row',
         justifyContent: "space-around",
-        marginBottom: 10
+        // paddingBottom: 10,
+        // backgroundColor: '#123456'
     },
     infoItemContainer: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        flex:1
+        flex: 1,
+        // backgroundColor: '#123456',
+        // paddingBottom: 10
     },
     infoContainer: {
+        paddingTop: 10,
+        paddingBottom: 10,
         alignItems: 'center',
-        flex:1
+        // backgroundColor: '#123456',
+        flex: 1
     },
-    userInfoTitle:{
-        fontSize:13,
-        color:'#6e6f72'
+    userInfoTitle: {
+        fontSize: 13,
+        color: '#6e6f72'
     },
-    userInfoValue:{
-        fontWeight:'bold',
-        fontSize:15,
-        marginBottom:3
+    userInfoValue: {
+        fontWeight: 'bold',
+        fontSize: 15,
+        marginBottom: 3
     }
 });

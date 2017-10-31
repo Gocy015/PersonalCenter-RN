@@ -40,10 +40,10 @@ export class MainPageView extends Component {
                     {itemAppearance}
                 </TouchableHighlight>
             ),
-            headerStyle:{
-                borderBottomColor:'transparent',
+            headerStyle: {
+                borderBottomColor: 'transparent',
                 // tintColor:""
-                backgroundColor:'#F6F6F6'
+                backgroundColor: '#F6F6F6'
             }
             // headerTintColor:'transparent'
         };
@@ -76,10 +76,11 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffdd00"
     },
     rightItemImageButton: {
-        width: 26,
-        height: 26,
+        width: 22,
+        height: 22,
         // padding: 32
-        marginRight: 8
+        marginRight: 8,
+        resizeMode: 'contain'
     },
     rightItemTextButton: {
         fontSize: 16,

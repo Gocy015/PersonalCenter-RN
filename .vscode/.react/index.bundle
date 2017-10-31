@@ -58354,7 +58354,7 @@ var _reactNative = require(12            ); // 12 = react-native
 
 var _MainPage = require(492                                ); // 492 = ./PersonalCenter/code/MainPage.js
 
-var _reactNavigation = require(501               ); // 501 = react-navigation
+var _reactNavigation = require(499               ); // 499 = react-navigation
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58499,7 +58499,7 @@ var MainPageView = exports.MainPageView = _wrapComponent('MainPageView')((_temp 
         _this.props.navigation.setParams({
             rightItemTitle: 'Settings',
             rightItemAction: _this.settingsButtonPressed,
-            rightItemImagePath: require(500                                     ) // 500 = ../resources/nav_btn_set_black_nor.png
+            rightItemImagePath: require(498                                     ) // 498 = ../resources/nav_btn_set_black_nor.png
         });
         return _this;
     }
@@ -58581,10 +58581,11 @@ var styles = _reactNative.StyleSheet.create({
         backgroundColor: "#ffdd00"
     },
     rightItemImageButton: {
-        width: 26,
-        height: 26,
+        width: 22,
+        height: 22,
 
-        marginRight: 8
+        marginRight: 8,
+        resizeMode: 'contain'
     },
     rightItemTextButton: {
         fontSize: 16,
@@ -58612,9 +58613,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _UserInfoCell = require(564             ); // 564 = ./UserInfoCell
+var _UserInfoCell = require(494             ); // 494 = ./UserInfoCell
 
 var _UserInfoCell2 = _interopRequireDefault(_UserInfoCell);
+
+var _DailyMissionCell = require(496                 ); // 496 = ./DailyMissionCell
+
+var _DailyMissionCell2 = _interopRequireDefault(_DailyMissionCell);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -58664,7 +58669,7 @@ var MainPageScrollView = exports.MainPageScrollView = _wrapComponent('MainPageSc
             return _react3.default.createElement(GridView, {
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 22
+                    lineNumber: 23
                 }
             });
         }
@@ -58677,6 +58682,8 @@ var itemSpacing = 0;
 var itemPerRow = 3;
 var itemWidth = appWindow.width / itemPerRow - itemPerRow * itemSpacing;
 var itemHeight = 100;
+var userInfoHeight = 166;
+var dailyMissionHeight = 60;
 
 var GridView = _wrapComponent('GridView')(function (_Component2) {
     _inherits(GridView, _Component2);
@@ -58689,10 +58696,11 @@ var GridView = _wrapComponent('GridView')(function (_Component2) {
                 } });
 
             var data = [];
-            for (var index = 0; index < 10; index++) {
-                data.push("Cell : " + index);
+            data.push('User Info Cell');
+            data.push('Daily Mission Cell');
+            for (var index = 0; index <= 10; index++) {
+                data.push("Cell " + index);
             }
-
             this.state = {
                 dataSource: ds.cloneWithRows(data)
             };
@@ -58716,38 +58724,55 @@ var GridView = _wrapComponent('GridView')(function (_Component2) {
     _createClass(GridView, [{
         key: 'render',
         value: function render() {
-            var rows = Math.ceil(appWindow.height / (itemHeight + itemSpacing));
-            var initialSize = Math.min(rows * itemPerRow, this.dataArray.length);
+            var rows = Math.ceil((appWindow.height - userInfoHeight) / (itemHeight + itemSpacing));
+            var initialSize = 1 + Math.min(rows * itemPerRow, this.dataArray.length);
             console.log('calculated rows : ' + rows + ',items : ' + rows * itemPerRow + ',final initial size : ', initialSize);
             return _react3.default.createElement(_reactNative.ListView, { contentContainerStyle: styles.list,
                 initialListSize: initialSize,
                 dataSource: this.state.dataSource,
-                renderRow: this._renderRow.bind(this),
+                renderRow: this._renderItem.bind(this),
                 __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 64
+                    lineNumber: 69
                 }
             });
         }
     }, {
-        key: '_renderRow',
-        value: function _renderRow(rowData, sectionID, rowID) {
-            var rowNum = parseInt(rowID);
+        key: '_renderItem',
+        value: function _renderItem(itemData, sectionID, itemID) {
+            var imageUris = ['https://cdn3.iconfinder.com/data/icons/video-game-consoles-and-controllers/288/ps4_controller-01-512.png', 'https://d30y9cdsu7xlg0.cloudfront.net/png/194080-200.png', 'https://cdn2.iconfinder.com/data/icons/game-device-5/512/xone_controller_gray-512.png'];
+            var itemNum = parseInt(itemID);
             var imgSource = {
-                uri: THUMB_URLS[rowNum % THUMB_URLS.length]
+                uri: imageUris[itemNum % imageUris.length]
             };
+
             var self = this;
-            if (rowNum == 0) {
+            if (itemNum == 0) {
                 return _react3.default.createElement(
                     _reactNative.View,
                     { style: styles.userCell, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 80
+                            lineNumber: 91
                         }
                     },
-                    _react3.default.createElement(_UserInfoCell2.default, { headerUrl: require(565                      ), userName: 'Gocy', __source: { // 565 = ../resources/header.png
+                    _react3.default.createElement(_UserInfoCell2.default, { headerUrl: require(497                      ), userName: 'Gocy', __source: { // 497 = ../resources/header.png
                             fileName: _jsxFileName,
-                            lineNumber: 81
+                            lineNumber: 92
+                        }
+                    })
+                );
+            }
+            if (itemNum == 1) {
+                return _react3.default.createElement(
+                    _reactNative.View,
+                    { style: styles.dailyMissionCell, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 98
+                        }
+                    },
+                    _react3.default.createElement(_DailyMissionCell2.default, { missions: [{ name: '日常任务', progress: 0.3 }, { name: '月度壕友成就', progress: 0.0 }, { name: '刷飞机才是壕', progress: 0.9 }], __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 99
                         }
                     })
                 );
@@ -58755,10 +58780,10 @@ var GridView = _wrapComponent('GridView')(function (_Component2) {
             return _react3.default.createElement(
                 _reactNative.TouchableHighlight,
                 { onPress: function onPress() {
-                        return self._pressRow(rowID);
+                        return self._pressItem(itemID);
                     }, underlayColor: 'rgba(0,0,0,0)', __source: {
                         fileName: _jsxFileName,
-                        lineNumber: 86
+                        lineNumber: 108
                     }
                 },
                 _react3.default.createElement(
@@ -58766,44 +58791,43 @@ var GridView = _wrapComponent('GridView')(function (_Component2) {
                     {
                         __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 87
+                            lineNumber: 109
                         }
                     },
                     _react3.default.createElement(
                         _reactNative.View,
                         { style: styles.infoCell, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 88
+                                lineNumber: 110
                             }
                         },
                         _react3.default.createElement(_reactNative.Image, { style: styles.thumb, source: imgSource, __source: {
                                 fileName: _jsxFileName,
-                                lineNumber: 89
+                                lineNumber: 111
                             }
                         }),
                         _react3.default.createElement(
                             _reactNative.Text,
                             { style: styles.text, __source: {
                                     fileName: _jsxFileName,
-                                    lineNumber: 90
+                                    lineNumber: 112
                                 }
                             },
-                            rowData
+                            itemData
                         )
                     )
                 )
             );
         }
     }, {
-        key: '_pressRow',
-        value: function _pressRow(rowID) {
-            var row = parseInt(rowID);
-            if (row >= this.dataArray.length) {
+        key: '_pressItem',
+        value: function _pressItem(itemID) {
+            var item = parseInt(itemID);
+            if (item >= this.dataArray.length) {
                 return;
             }
 
-            this.dataArray[row] = this.dataArray[row] + 'x';
-            this._reloadData();
+            console.log('Item ' + item + ' pressd ,data : ' + this.dataArray[item]);
         }
     }, {
         key: '_reloadData',
@@ -58817,8 +58841,6 @@ var GridView = _wrapComponent('GridView')(function (_Component2) {
     return GridView;
 }(_react2.Component));
 
-var THUMB_URLS = ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509693364&di=aa4202ac0272647cdcc9bd35aebc260e&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.gamersky.com%2Fimage2017%2F04%2F20170422_xdj_187_7%2Fimage002.jpg'];
-
 var styles = _reactNative.StyleSheet.create({
     list: {
         justifyContent: 'flex-start',
@@ -58827,7 +58849,14 @@ var styles = _reactNative.StyleSheet.create({
     },
     userCell: {
         width: appWindow.width,
+        height: userInfoHeight,
         marginBottom: 6
+    },
+    dailyMissionCell: {
+        width: appWindow.width,
+        height: dailyMissionHeight,
+        marginBottom: 6,
+        backgroundColor: '#F6F6F6'
     },
     infoCell: {
         justifyContent: 'center',
@@ -58942,8 +58971,7 @@ var UserInfoCell = _wrapComponent('UserInfoCell')(function (_Component) {
                         }),
                         _react3.default.createElement(
                             _reactNative.Text,
-                            {
-                                __source: {
+                            { style: styles.userName, __source: {
                                     fileName: _jsxFileName,
                                     lineNumber: 22
                                 }
@@ -58951,124 +58979,32 @@ var UserInfoCell = _wrapComponent('UserInfoCell')(function (_Component) {
                             this.userData.userName
                         )
                     ),
-                    _react3.default.createElement(_reactNative.Button, { style: styles.detailButton, title: '>', onPress: function onPress() {}, __source: {
-                            fileName: _jsxFileName,
-                            lineNumber: 24
-                        }
-                    })
+                    _react3.default.createElement(
+                        _reactNative.TouchableHighlight,
+                        {
+                            __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 24
+                            }
+                        },
+                        _react3.default.createElement(_reactNative.Image, { style: styles.headerArrow, source: require(495                          ), __source: { // 495 = ../resources/rightArrow.png
+                                fileName: _jsxFileName,
+                                lineNumber: 25
+                            }
+                        })
+                    )
                 ),
                 this._seperator(-1, 1, 0, 'row'),
                 _react3.default.createElement(
                     _reactNative.View,
                     { style: styles.lowerContainer, __source: {
                             fileName: _jsxFileName,
-                            lineNumber: 27
+                            lineNumber: 29
                         }
                     },
-                    _react3.default.createElement(
-                        _reactNative.View,
-                        { style: styles.infoItemContainer, __source: {
-                                fileName: _jsxFileName,
-                                lineNumber: 28
-                            }
-                        },
-                        _react3.default.createElement(
-                            _reactNative.View,
-                            { style: styles.infoContainer, __source: {
-                                    fileName: _jsxFileName,
-                                    lineNumber: 29
-                                }
-                            },
-                            _react3.default.createElement(
-                                _reactNative.Text,
-                                { style: styles.userInfoValue, __source: {
-                                        fileName: _jsxFileName,
-                                        lineNumber: 30
-                                    }
-                                },
-                                '18'
-                            ),
-                            _react3.default.createElement(
-                                _reactNative.Text,
-                                { style: styles.userInfoTitle, __source: {
-                                        fileName: _jsxFileName,
-                                        lineNumber: 32
-                                    }
-                                },
-                                '\u5173\u6CE8'
-                            )
-                        ),
-                        this._seperator(1, -1, 2, 'column')
-                    ),
-                    _react3.default.createElement(
-                        _reactNative.View,
-                        { style: styles.infoItemContainer, __source: {
-                                fileName: _jsxFileName,
-                                lineNumber: 37
-                            }
-                        },
-                        _react3.default.createElement(
-                            _reactNative.View,
-                            { style: styles.infoContainer, __source: {
-                                    fileName: _jsxFileName,
-                                    lineNumber: 38
-                                }
-                            },
-                            _react3.default.createElement(
-                                _reactNative.Text,
-                                { style: styles.userInfoValue, __source: {
-                                        fileName: _jsxFileName,
-                                        lineNumber: 39
-                                    }
-                                },
-                                '6'
-                            ),
-                            _react3.default.createElement(
-                                _reactNative.Text,
-                                { style: styles.userInfoTitle, __source: {
-                                        fileName: _jsxFileName,
-                                        lineNumber: 41
-                                    }
-                                },
-                                '\u7C89\u4E1D'
-                            )
-                        ),
-                        this._seperator(1, -1, 2, 'column')
-                    ),
-                    _react3.default.createElement(
-                        _reactNative.View,
-                        { style: styles.infoItemContainer, __source: {
-                                fileName: _jsxFileName,
-                                lineNumber: 46
-                            }
-                        },
-                        _react3.default.createElement(
-                            _reactNative.View,
-                            { style: styles.infoContainer, __source: {
-                                    fileName: _jsxFileName,
-                                    lineNumber: 47
-                                }
-                            },
-                            _react3.default.createElement(
-                                _reactNative.Text,
-                                { style: styles.userInfoValue, __source: {
-                                        fileName: _jsxFileName,
-                                        lineNumber: 48
-                                    }
-                                },
-                                '23'
-                            ),
-                            _react3.default.createElement(
-                                _reactNative.Text,
-                                { style: styles.userInfoTitle, __source: {
-                                        fileName: _jsxFileName,
-                                        lineNumber: 50
-                                    }
-                                },
-                                '\u52A8\u6001'
-                            )
-                        )
-                    )
+                    this._infoView(22, '关注', true),
+                    this._infoView(6, '粉丝', true),
+                    this._infoView(23, "动态", false)
                 )
             );
         }
@@ -59096,9 +59032,49 @@ var UserInfoCell = _wrapComponent('UserInfoCell')(function (_Component) {
             }
             return _react3.default.createElement(_reactNative.View, { style: commonStyle, __source: {
                     fileName: _jsxFileName,
-                    lineNumber: 81
+                    lineNumber: 60
                 }
             });
+        }
+    }, {
+        key: '_infoView',
+        value: function _infoView(value, title, needSeperator) {
+
+            return _react3.default.createElement(
+                _reactNative.View,
+                { style: styles.infoItemContainer, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 68
+                    }
+                },
+                _react3.default.createElement(
+                    _reactNative.View,
+                    { style: styles.infoContainer, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 69
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.Text,
+                        { style: styles.userInfoValue, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 70
+                            }
+                        },
+                        value
+                    ),
+                    _react3.default.createElement(
+                        _reactNative.Text,
+                        { style: styles.userInfoTitle, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 72
+                            }
+                        },
+                        title
+                    )
+                ),
+                needSeperator ? this._seperator(1, -1, 10, 'column') : null
+            );
         }
     }]);
 
@@ -59132,11 +59108,18 @@ var styles = _reactNative.StyleSheet.create({
         marginRight: 10,
         borderRadius: 35
     },
+    userName: {
+        fontSize: 16,
+        paddingBottom: 20
+    },
+    headerArrow: {
+        width: 24,
+        height: 16,
+        resizeMode: 'contain'
+    },
     lowerContainer: {
-        marginTop: 10,
         flexDirection: 'row',
-        justifyContent: "space-around",
-        marginBottom: 10
+        justifyContent: "space-around"
     },
     infoItemContainer: {
         flexDirection: 'row',
@@ -59144,7 +59127,10 @@ var styles = _reactNative.StyleSheet.create({
         flex: 1
     },
     infoContainer: {
+        paddingTop: 10,
+        paddingBottom: 10,
         alignItems: 'center',
+
         flex: 1
     },
     userInfoTitle: {
@@ -59157,92 +59143,454 @@ var styles = _reactNative.StyleSheet.create({
         marginBottom: 3
     }
 });
-}, 564, null, "PersonalCenter/PersonalCenter/code/UserInfoCell.js");
+}, 494, null, "PersonalCenter/PersonalCenter/code/UserInfoCell.js");
+__d(/* PersonalCenter/PersonalCenter/resources/rightArrow.png */function(global, require, module, exports) {module.exports=require(324                                         ).registerAsset({"__packager_asset":true,"httpServerLocation":"/assets/PersonalCenter/resources","width":14,"height":24,"scales":[1],"hash":"325234a4316dfd1061459bb7a854e765","name":"rightArrow","type":"png"}); // 324 = react-native/Libraries/Image/AssetRegistry
+}, 495, null, "PersonalCenter/PersonalCenter/resources/rightArrow.png");
+__d(/* PersonalCenter/PersonalCenter/code/DailyMissionCell.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _react2 = require(36     ); // 36 = react
+
+var _react3 = _interopRequireDefault(_react2);
+
+var _index = require(160                                                    ); // 160 = ./../../node_modules/react-transform-hmr/lib/index.js
+
+var _index2 = _interopRequireDefault(_index);
+
+var _jsxFileName = '/Users/gocy/Desktop/ReactNative/PersonalCenter/PersonalCenter/code/DailyMissionCell.js';
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _reactNative = require(12            ); // 12 = react-native
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var _components = {
+    DailyMissionCell: {
+        displayName: 'DailyMissionCell'
+    },
+    MissionProgressAnimatedView: {
+        displayName: 'MissionProgressAnimatedView'
+    }
+};
+
+var _node_modulesReactTransformHmrLibIndexJs2 = (0, _index2.default)({
+    filename: '/Users/gocy/Desktop/ReactNative/PersonalCenter/PersonalCenter/code/DailyMissionCell.js',
+    components: _components,
+    locals: [module],
+    imports: [_react3.default]
+});
+
+function _wrapComponent(id) {
+    return function (Component) {
+        return _node_modulesReactTransformHmrLibIndexJs2(Component, id);
+    };
+}
+
+var DailyMissionCell = _wrapComponent('DailyMissionCell')(function (_Component) {
+    _inherits(DailyMissionCell, _Component);
+
+    function DailyMissionCell(props) {
+        _classCallCheck(this, DailyMissionCell);
+
+        var _this = _possibleConstructorReturn(this, (DailyMissionCell.__proto__ || Object.getPrototypeOf(DailyMissionCell)).call(this, props));
+
+        _this.state = {
+            missions: props.missions ? props.missions : []
+        };
+        return _this;
+    }
+
+    _createClass(DailyMissionCell, [{
+        key: 'render',
+        value: function render() {
+            if (!this.missionProgressView) {
+                this.missionProgressView = _react3.default.createElement(MissionProgressAnimatedView, { missions: this.state.missions, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 21
+                    }
+                });
+            }
+            console.log('DisplayMission Render');
+            var missionProgressView = this.missionProgressView;
+            return _react3.default.createElement(
+                _reactNative.Animated.View,
+                { style: styles.mainContainer, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 26
+                    }
+                },
+                _react3.default.createElement(_reactNative.View, { style: styles.missionImageContainer, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 27
+                    }
+                }),
+                _react3.default.createElement(
+                    _reactNative.View,
+                    { style: styles.missionDetailContainer, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 29
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.View,
+                        { style: styles.missionProgressContainer, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 30
+                            }
+                        },
+                        missionProgressView
+                    ),
+                    _react3.default.createElement(_reactNative.View, { style: styles.missionImageContainer, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 33
+                        }
+                    })
+                ),
+                _react3.default.createElement(_reactNative.View, { style: styles.missionImageContainer, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 36
+                    }
+                })
+            );
+        }
+    }]);
+
+    return DailyMissionCell;
+}(_react2.Component));
+
+exports.default = DailyMissionCell;
+
+
+var styles = _reactNative.StyleSheet.create({
+    mainContainer: {
+        flex: 1,
+        flexDirection: 'row'
+    },
+    missionImageContainer: {
+        backgroundColor: "#888888",
+
+        flex: 1
+    },
+    missionDetailContainer: {
+        flexDirection: 'row',
+        flex: 4.5 },
+    missionProgressContainer: {
+        flex: 3
+    }
+});
+
+var MissionProgressAnimatedView = _wrapComponent('MissionProgressAnimatedView')(function (_Component2) {
+    _inherits(MissionProgressAnimatedView, _Component2);
+
+    function MissionProgressAnimatedView(props) {
+        _classCallCheck(this, MissionProgressAnimatedView);
+
+        var _this2 = _possibleConstructorReturn(this, (MissionProgressAnimatedView.__proto__ || Object.getPrototypeOf(MissionProgressAnimatedView)).call(this, props));
+
+        _this2.state = {
+            missionOneIndex: 0,
+            missionTwoIndex: -1,
+            missions: props.missions,
+            animationDuration: props.animationDuration > 0 ? props.animationDuration : 1,
+            displayDuration: props.displayDuration > 0 ? props.displayDuration : 5,
+            missionOneActualY: 0,
+            missionTwoActualY: Infinity,
+            missionOneAnimatedY: new _reactNative.Animated.Value(0),
+            missionTwoAnimatedY: new _reactNative.Animated.Value(0),
+            containerHeight: 0,
+            shouldStartAnimation: false
+        };
+        _this2.recycleMissionViewOne = null;
+        _this2.recycleMissionViewTwo = null;
+        return _this2;
+    }
+
+    _createClass(MissionProgressAnimatedView, [{
+        key: 'render',
+        value: function render() {
+            var _this3 = this;
+
+            console.log('Render daily mission');
+
+            if (this.timerId) {
+                clearInterval(this.timerId);
+                this._resetAnimations();
+            }
+            this._constructMissionViews();
+
+            if (this.state.missions.length > 1 && this.state.missionTwoActualY !== Infinity) {
+                this.timerId = setInterval(function () {
+                    _this3.setState({
+                        shouldStartAnimation: true
+                    });
+                }, this.state.displayDuration * 1000);
+            }
+
+            if (this.state.shouldStartAnimation) {
+                var missionOneAnimation = _reactNative.Animated.timing(this.state.missionOneAnimatedY, {
+                    toValue: this.state.missionOneActualY - this.state.containerHeight,
+                    duration: this.state.animationDuration * 1000
+                });
+                var missionTwoAnimation = _reactNative.Animated.timing(this.state.missionTwoAnimatedY, {
+                    toValue: this.state.missionTwoActualY - this.state.containerHeight,
+                    duration: this.state.animationDuration * 1000
+                });
+
+                _reactNative.Animated.parallel([missionOneAnimation, missionTwoAnimation]).start();
+
+                this.state.missionOneActualY -= this.state.containerHeight;
+                this.state.missionTwoActualY -= this.state.containerHeight;
+                return _react3.default.createElement(
+                    _reactNative.View,
+                    { style: missionStyles.missionsContainer, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 123
+                        }
+                    },
+                    this.recycleMissionViewOne,
+                    this.recycleMissionViewTwo
+                );
+            }
+
+            return _react3.default.createElement(
+                _reactNative.View,
+                { style: missionStyles.missionsContainer, __source: {
+                        fileName: _jsxFileName,
+                        lineNumber: 132
+                    }
+                },
+                this.recycleMissionViewOne
+            );
+        }
+    }, {
+        key: '_constructMissionViews',
+        value: function _constructMissionViews() {
+            var _this4 = this;
+
+            this._setupAnimationValues();
+
+            if (!this.recycleMissionViewOne) {
+                var missionOne = this.state.missions[this.state.missionOneIndex];
+                this.recycleMissionViewOne = _react3.default.createElement(
+                    _reactNative.Animated.View,
+                    { style: [missionStyles.singleMissionContainer, { transform: [{ translateY: this.state.missionOneAnimatedY }] }],
+                        onLayout: function onLayout(event) {
+                            _this4.setState({
+                                containerHeight: event.nativeEvent.layout.height
+                            });
+                        }, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 145
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.Text,
+                        { style: missionStyles.singleMissionText, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 152
+                            }
+                        },
+                        missionOne.name
+                    ),
+                    _react3.default.createElement(_reactNative.View, { style: missionStyles.singleMissionProgressBar, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 153
+                        }
+                    })
+                );
+            }
+
+            if (!this.recycleMissionViewTwo && this.state.missionTwoIndex >= 0) {
+                var missionTwo = this.state.missions[this.state.missionTwoIndex];
+                this.recycleMissionViewTwo = _react3.default.createElement(
+                    _reactNative.Animated.View,
+                    { style: [missionStyles.singleMissionContainer, { transform: [{ translateY: this.state.missionTwoAnimatedY }] }], __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 162
+                        }
+                    },
+                    _react3.default.createElement(
+                        _reactNative.Text,
+                        { style: missionStyles.singleMissionText, __source: {
+                                fileName: _jsxFileName,
+                                lineNumber: 163
+                            }
+                        },
+                        missionTwo.name
+                    ),
+                    _react3.default.createElement(_reactNative.View, { style: missionStyles.singleMissionProgressBar, __source: {
+                            fileName: _jsxFileName,
+                            lineNumber: 164
+                        }
+                    })
+                );
+            }
+        }
+    }, {
+        key: '_setupAnimationValues',
+        value: function _setupAnimationValues() {
+            if (this.state.containerHeight <= 0) {
+                return;
+            }
+            if (this.state.missionTwoActualY === Infinity && this.state.missionOneActualY == 0) {
+                this.state.missionTwoActualY = this.state.containerHeight;
+                this.state.missionTwoAnimatedY = new _reactNative.Animated.Value(this.state.containerHeight);
+                this.state.missionTwoIndex = this._indexAfter(this.state.missionOneIndex);
+            }
+
+            if (this.state.missionOneActualY <= -this.state.containerHeight) {
+                this.state.missionOneActualY = this.state.containerHeight;
+                this.recycleMissionViewOne = null;
+                this.state.missionOneIndex = this._indexAfter(this.state.missionTwoIndex);
+                this.state.missionOneAnimatedY = new _reactNative.Animated.Value(this.state.containerHeight);
+            }
+            if (this.state.missionTwoActualY <= -this.state.containerHeight) {
+                this.state.missionTwoActualY = this.state.containerHeight;
+                this.recycleMissionViewTwo = null;
+                this.state.missionTwoIndex = this._indexAfter(this.state.missionOneIndex);
+                this.state.missionTwoAnimatedY = new _reactNative.Animated.Value(this.state.containerHeight);
+            }
+        }
+    }, {
+        key: '_resetAnimations',
+        value: function _resetAnimations() {
+            this.state.missionOneActualY = 0;
+            this.state.missionTwoActualY = Infinity;
+            this.recycleMissionViewOne = null;
+            this.recycleMissionViewTwo = null;
+            this.state.missionOneAnimatedY = new _reactNative.Animated.Value(0);
+            this.state.missionTwoAnimatedY = new _reactNative.Animated.Value(0);
+
+            this.missionOneIndex = 0;
+            this.missionTwoIndex = -1;
+        }
+    }, {
+        key: '_indexAfter',
+        value: function _indexAfter(index) {
+            var idx = ++index;
+            idx = idx % this.state.missions.length;
+            return idx;
+        }
+    }]);
+
+    return MissionProgressAnimatedView;
+}(_react2.Component));
+
+var missionStyles = _reactNative.StyleSheet.create({
+    missionsContainer: {
+        flex: 1,
+
+        overflow: 'hidden'
+    },
+    singleMissionContainer: {
+        flex: 1,
+        backgroundColor: '#ffdd00',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        height: '100%',
+        width: '100%',
+        position: 'absolute' },
+    singleMissionText: {},
+    singleMissionProgressBar: {
+        backgroundColor: '#666666',
+
+        height: 10
+    }
+});
+}, 496, null, "PersonalCenter/PersonalCenter/code/DailyMissionCell.js");
 __d(/* PersonalCenter/PersonalCenter/resources/header.png */function(global, require, module, exports) {module.exports=require(324                                         ).registerAsset({"__packager_asset":true,"httpServerLocation":"/assets/PersonalCenter/resources","width":1176,"height":1146,"scales":[1],"hash":"727c492a5f6f5e23599d39b73806ef87","name":"header","type":"png"}); // 324 = react-native/Libraries/Image/AssetRegistry
-}, 565, null, "PersonalCenter/PersonalCenter/resources/header.png");
+}, 497, null, "PersonalCenter/PersonalCenter/resources/header.png");
 __d(/* PersonalCenter/PersonalCenter/resources/nav_btn_set_black_nor.png */function(global, require, module, exports) {module.exports=require(324                                         ).registerAsset({"__packager_asset":true,"httpServerLocation":"/assets/PersonalCenter/resources","width":66,"height":66,"scales":[1],"hash":"8312729defe61b95ce493cc25bf0dac5","name":"nav_btn_set_black_nor","type":"png"}); // 324 = react-native/Libraries/Image/AssetRegistry
-}, 500, null, "PersonalCenter/PersonalCenter/resources/nav_btn_set_black_nor.png");
+}, 498, null, "PersonalCenter/PersonalCenter/resources/nav_btn_set_black_nor.png");
 __d(/* react-navigation/src/react-navigation.js */function(global, require, module, exports) {
 
 module.exports = {
   get createNavigationContainer() {
-    return require(502                          ).default; // 502 = ./createNavigationContainer
+    return require(500                          ).default; // 500 = ./createNavigationContainer
   },
   get StateUtils() {
-    return require(506           ).default; // 506 = ./StateUtils
+    return require(504           ).default; // 504 = ./StateUtils
   },
   get addNavigationHelpers() {
-    return require(505                     ).default; // 505 = ./addNavigationHelpers
+    return require(503                     ).default; // 503 = ./addNavigationHelpers
   },
   get NavigationActions() {
-    return require(504                  ).default; // 504 = ./NavigationActions
+    return require(502                  ).default; // 502 = ./NavigationActions
   },
 
   get createNavigator() {
-    return require(508                           ).default; // 508 = ./navigators/createNavigator
+    return require(506                           ).default; // 506 = ./navigators/createNavigator
   },
   get StackNavigator() {
-    return require(509                          ).default; // 509 = ./navigators/StackNavigator
+    return require(507                          ).default; // 507 = ./navigators/StackNavigator
   },
   get TabNavigator() {
-    return require(539                        ).default; // 539 = ./navigators/TabNavigator
+    return require(537                        ).default; // 537 = ./navigators/TabNavigator
   },
   get DrawerNavigator() {
-    return require(555                           ).default; // 555 = ./navigators/DrawerNavigator
+    return require(553                           ).default; // 553 = ./navigators/DrawerNavigator
   },
 
   get StackRouter() {
-    return require(530                    ).default; // 530 = ./routers/StackRouter
+    return require(528                    ).default; // 528 = ./routers/StackRouter
   },
   get TabRouter() {
-    return require(540                  ).default; // 540 = ./routers/TabRouter
+    return require(538                  ).default; // 538 = ./routers/TabRouter
   },
 
   get Transitioner() {
-    return require(527                   ).default; // 527 = ./views/Transitioner
+    return require(525                   ).default; // 525 = ./views/Transitioner
   },
   get CardStackTransitioner() {
-    return require(510                                      ).default; // 510 = ./views/CardStack/CardStackTransitioner
+    return require(508                                      ).default; // 508 = ./views/CardStack/CardStackTransitioner
   },
   get CardStack() {
-    return require(511                          ).default; // 511 = ./views/CardStack/CardStack
+    return require(509                          ).default; // 509 = ./views/CardStack/CardStack
   },
   get Card() {
-    return require(513                     ).default; // 513 = ./views/CardStack/Card
+    return require(511                     ).default; // 511 = ./views/CardStack/Card
   },
 
   get Header() {
-    return require(516                    ).default; // 516 = ./views/Header/Header
+    return require(514                    ).default; // 514 = ./views/Header/Header
   },
   get HeaderTitle() {
-    return require(517                         ).default; // 517 = ./views/Header/HeaderTitle
+    return require(515                         ).default; // 515 = ./views/Header/HeaderTitle
   },
   get HeaderBackButton() {
-    return require(518                              ).default; // 518 = ./views/Header/HeaderBackButton
+    return require(516                              ).default; // 516 = ./views/Header/HeaderBackButton
   },
 
   get DrawerView() {
-    return require(557                        ).default; // 557 = ./views/Drawer/DrawerView
+    return require(555                        ).default; // 555 = ./views/Drawer/DrawerView
   },
   get DrawerItems() {
-    return require(562                                  ).default; // 562 = ./views/Drawer/DrawerNavigatorItems
+    return require(560                                  ).default; // 560 = ./views/Drawer/DrawerNavigatorItems
   },
 
   get TabView() {
-    return require(541                      ).default; // 541 = ./views/TabView/TabView
+    return require(539                      ).default; // 539 = ./views/TabView/TabView
   },
   get TabBarTop() {
-    return require(552                        ).default; // 552 = ./views/TabView/TabBarTop
+    return require(550                        ).default; // 550 = ./views/TabView/TabBarTop
   },
   get TabBarBottom() {
-    return require(554                           ).default; // 554 = ./views/TabView/TabBarBottom
+    return require(552                           ).default; // 552 = ./views/TabView/TabBarBottom
   },
 
   get withNavigation() {
-    return require(563                     ).default; // 563 = ./views/withNavigation
+    return require(561                     ).default; // 561 = ./views/withNavigation
   }
 };
-}, 501, null, "react-navigation/src/react-navigation.js");
+}, 499, null, "react-navigation/src/react-navigation.js");
 __d(/* react-navigation/src/createNavigationContainer.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -59263,13 +59611,13 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.default = createNavigationContainer;
 
-var _PlatformHelpers = require(503                ); // 503 = ./PlatformHelpers
+var _PlatformHelpers = require(501                ); // 501 = ./PlatformHelpers
 
-var _NavigationActions = require(504                  ); // 504 = ./NavigationActions
+var _NavigationActions = require(502                  ); // 502 = ./NavigationActions
 
 var _NavigationActions2 = _interopRequireDefault(_NavigationActions);
 
-var _addNavigationHelpers = require(505                     ); // 505 = ./addNavigationHelpers
+var _addNavigationHelpers = require(503                     ); // 503 = ./addNavigationHelpers
 
 var _addNavigationHelpers2 = _interopRequireDefault(_addNavigationHelpers);
 
@@ -59472,7 +59820,7 @@ function createNavigationContainer(Component) {
 
   return NavigationContainer;
 }
-}, 502, null, "react-navigation/src/createNavigationContainer.js");
+}, 500, null, "react-navigation/src/createNavigationContainer.js");
 __d(/* react-navigation/src/PlatformHelpers.native.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -59484,7 +59832,7 @@ var BackHandler = _reactNative.BackHandler || _reactNative.BackAndroid;
 
 exports.BackHandler = BackHandler;
 exports.Linking = _reactNative.Linking;
-}, 503, null, "react-navigation/src/PlatformHelpers.native.js");
+}, 501, null, "react-navigation/src/PlatformHelpers.native.js");
 __d(/* react-navigation/src/NavigationActions.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -59553,7 +59901,7 @@ exports.default = {
 
   mapDeprecatedActionAndWarn: mapDeprecatedActionAndWarn
 };
-}, 504, null, "react-navigation/src/NavigationActions.js");
+}, 502, null, "react-navigation/src/NavigationActions.js");
 __d(/* react-navigation/src/addNavigationHelpers.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -59584,19 +59932,19 @@ exports.default = function (navigation) {
   });
 };
 
-var _NavigationActions = require(504                  ); // 504 = ./NavigationActions
+var _NavigationActions = require(502                  ); // 502 = ./NavigationActions
 
 var _NavigationActions2 = _interopRequireDefault(_NavigationActions);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-}, 505, null, "react-navigation/src/addNavigationHelpers.js");
+}, 503, null, "react-navigation/src/addNavigationHelpers.js");
 __d(/* react-navigation/src/StateUtils.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _invariant = require(507                ); // 507 = ./utils/invariant
+var _invariant = require(505                ); // 505 = ./utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
@@ -59707,7 +60055,7 @@ var StateUtils = {
 };
 
 exports.default = StateUtils;
-}, 506, null, "react-navigation/src/StateUtils.js");
+}, 504, null, "react-navigation/src/StateUtils.js");
 __d(/* react-navigation/src/utils/invariant.js */function(global, require, module, exports) {
 
 'use strict';
@@ -59744,7 +60092,7 @@ function invariant(condition, format, a, b, c, d, e, f) {
 }
 
 module.exports = invariant;
-}, 507, null, "react-navigation/src/utils/invariant.js");
+}, 505, null, "react-navigation/src/utils/invariant.js");
 __d(/* react-navigation/src/navigators/createNavigator.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -59823,7 +60171,7 @@ function createNavigator(router, routeConfigs, navigatorConfig, navigatorType) {
     return Navigator;
   };
 }
-}, 508, null, "react-navigation/src/navigators/createNavigator.js");
+}, 506, null, "react-navigation/src/navigators/createNavigator.js");
 __d(/* react-navigation/src/navigators/StackNavigator.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -59836,23 +60184,23 @@ var _react = require(36     ); // 36 = react
 
 var _react2 = _interopRequireDefault(_react);
 
-var _createNavigationContainer = require(502                           ); // 502 = ../createNavigationContainer
+var _createNavigationContainer = require(500                           ); // 500 = ../createNavigationContainer
 
 var _createNavigationContainer2 = _interopRequireDefault(_createNavigationContainer);
 
-var _createNavigator = require(508                ); // 508 = ./createNavigator
+var _createNavigator = require(506                ); // 506 = ./createNavigator
 
 var _createNavigator2 = _interopRequireDefault(_createNavigator);
 
-var _CardStackTransitioner = require(510                                       ); // 510 = ../views/CardStack/CardStackTransitioner
+var _CardStackTransitioner = require(508                                       ); // 508 = ../views/CardStack/CardStackTransitioner
 
 var _CardStackTransitioner2 = _interopRequireDefault(_CardStackTransitioner);
 
-var _StackRouter = require(530                     ); // 530 = ../routers/StackRouter
+var _StackRouter = require(528                     ); // 528 = ../routers/StackRouter
 
 var _StackRouter2 = _interopRequireDefault(_StackRouter);
 
-var _NavigatorTypes = require(538               ); // 538 = ./NavigatorTypes
+var _NavigatorTypes = require(536               ); // 536 = ./NavigatorTypes
 
 var _NavigatorTypes2 = _interopRequireDefault(_NavigatorTypes);
 
@@ -59898,7 +60246,7 @@ exports.default = function (routeConfigMap) {
 
   return (0, _createNavigationContainer2.default)(navigator);
 };
-}, 509, null, "react-navigation/src/navigators/StackNavigator.js");
+}, 507, null, "react-navigation/src/navigators/StackNavigator.js");
 __d(/* react-navigation/src/views/CardStack/CardStackTransitioner.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -59921,19 +60269,19 @@ var _class,
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _CardStack = require(511          ); // 511 = ./CardStack
+var _CardStack = require(509          ); // 509 = ./CardStack
 
 var _CardStack2 = _interopRequireDefault(_CardStack);
 
-var _CardStackStyleInterpolator = require(526                           ); // 526 = ./CardStackStyleInterpolator
+var _CardStackStyleInterpolator = require(524                           ); // 524 = ./CardStackStyleInterpolator
 
 var _CardStackStyleInterpolator2 = _interopRequireDefault(_CardStackStyleInterpolator);
 
-var _Transitioner = require(527              ); // 527 = ../Transitioner
+var _Transitioner = require(525              ); // 525 = ../Transitioner
 
 var _Transitioner2 = _interopRequireDefault(_Transitioner);
 
-var _TransitionConfigs = require(525                  ); // 525 = ./TransitionConfigs
+var _TransitionConfigs = require(523                  ); // 523 = ./TransitionConfigs
 
 var _TransitionConfigs2 = _interopRequireDefault(_TransitionConfigs);
 
@@ -60039,7 +60387,7 @@ var CardStackTransitioner = _wrapComponent('CardStackTransitioner')((_temp2 = _c
 }, _temp2));
 
 exports.default = CardStackTransitioner;
-}, 510, null, "react-navigation/src/views/CardStack/CardStackTransitioner.js");
+}, 508, null, "react-navigation/src/views/CardStack/CardStackTransitioner.js");
 __d(/* react-navigation/src/views/CardStack/CardStack.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -60058,33 +60406,33 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _clamp = require(512    ); // 512 = clamp
+var _clamp = require(510    ); // 510 = clamp
 
 var _clamp2 = _interopRequireDefault(_clamp);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _Card = require(513     ); // 513 = ./Card
+var _Card = require(511     ); // 511 = ./Card
 
 var _Card2 = _interopRequireDefault(_Card);
 
-var _Header = require(516               ); // 516 = ../Header/Header
+var _Header = require(514               ); // 514 = ../Header/Header
 
 var _Header2 = _interopRequireDefault(_Header);
 
-var _NavigationActions = require(504                      ); // 504 = ../../NavigationActions
+var _NavigationActions = require(502                      ); // 502 = ../../NavigationActions
 
 var _NavigationActions2 = _interopRequireDefault(_NavigationActions);
 
-var _addNavigationHelpers = require(505                         ); // 505 = ../../addNavigationHelpers
+var _addNavigationHelpers = require(503                         ); // 503 = ../../addNavigationHelpers
 
 var _addNavigationHelpers2 = _interopRequireDefault(_addNavigationHelpers);
 
-var _SceneView = require(524           ); // 524 = ../SceneView
+var _SceneView = require(522           ); // 522 = ../SceneView
 
 var _SceneView2 = _interopRequireDefault(_SceneView);
 
-var _TransitionConfigs = require(525                  ); // 525 = ./TransitionConfigs
+var _TransitionConfigs = require(523                  ); // 523 = ./TransitionConfigs
 
 var _TransitionConfigs2 = _interopRequireDefault(_TransitionConfigs);
 
@@ -60495,13 +60843,13 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 exports.default = CardStack;
-}, 511, null, "react-navigation/src/views/CardStack/CardStack.js");
+}, 509, null, "react-navigation/src/views/CardStack/CardStack.js");
 __d(/* clamp/index.js */function(global, require, module, exports) {module.exports = clamp;
 
 function clamp(value, min, max) {
   return min < max ? value < min ? min : value > max ? max : value : value < max ? max : value > min ? min : value;
 }
-}, 512, null, "clamp/index.js");
+}, 510, null, "clamp/index.js");
 __d(/* react-navigation/src/views/CardStack/Card.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -60520,7 +60868,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _PointerEventsContainer = require(514                       ); // 514 = ./PointerEventsContainer
+var _PointerEventsContainer = require(512                       ); // 512 = ./PointerEventsContainer
 
 var _PointerEventsContainer2 = _interopRequireDefault(_PointerEventsContainer);
 
@@ -60605,7 +60953,7 @@ var styles = _reactNative.StyleSheet.create({
 Card = (0, _PointerEventsContainer2.default)(Card);
 
 exports.default = Card;
-}, 513, null, "react-navigation/src/views/CardStack/Card.js");
+}, 511, null, "react-navigation/src/views/CardStack/Card.js");
 __d(/* react-navigation/src/views/CardStack/PointerEventsContainer.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -60626,11 +60974,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 exports.default = create;
 
-var _invariant = require(507                    ); // 507 = ../../utils/invariant
+var _invariant = require(505                    ); // 505 = ../../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _AnimatedValueSubscription = require(515                           ); // 515 = ../AnimatedValueSubscription
+var _AnimatedValueSubscription = require(513                           ); // 513 = ../AnimatedValueSubscription
 
 var _AnimatedValueSubscription2 = _interopRequireDefault(_AnimatedValueSubscription);
 
@@ -60763,7 +61111,7 @@ function create(Component) {
 
   return Container;
 }
-}, 514, null, "react-navigation/src/views/CardStack/PointerEventsContainer.js");
+}, 512, null, "react-navigation/src/views/CardStack/PointerEventsContainer.js");
 __d(/* react-navigation/src/views/AnimatedValueSubscription.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -60793,7 +61141,7 @@ var AnimatedValueSubscription = function () {
 }();
 
 exports.default = AnimatedValueSubscription;
-}, 515, null, "react-navigation/src/views/AnimatedValueSubscription.js");
+}, 513, null, "react-navigation/src/views/AnimatedValueSubscription.js");
 __d(/* react-navigation/src/views/Header/Header.js */function(global, require, module, exports) {
 
 'no babel-plugin-flow-react-proptypes';
@@ -60813,19 +61161,19 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _HeaderTitle = require(517            ); // 517 = ./HeaderTitle
+var _HeaderTitle = require(515            ); // 515 = ./HeaderTitle
 
 var _HeaderTitle2 = _interopRequireDefault(_HeaderTitle);
 
-var _HeaderBackButton = require(518                 ); // 518 = ./HeaderBackButton
+var _HeaderBackButton = require(516                 ); // 516 = ./HeaderBackButton
 
 var _HeaderBackButton2 = _interopRequireDefault(_HeaderBackButton);
 
-var _HeaderStyleInterpolator = require(521                        ); // 521 = ./HeaderStyleInterpolator
+var _HeaderStyleInterpolator = require(519                        ); // 519 = ./HeaderStyleInterpolator
 
 var _HeaderStyleInterpolator2 = _interopRequireDefault(_HeaderStyleInterpolator);
 
-var _withOrientation = require(522                 ); // 522 = ../withOrientation
+var _withOrientation = require(520                 ); // 520 = ../withOrientation
 
 var _withOrientation2 = _interopRequireDefault(_withOrientation);
 
@@ -61179,7 +61527,7 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 exports.default = (0, _withOrientation2.default)(Header);
-}, 516, null, "react-navigation/src/views/Header/Header.js");
+}, 514, null, "react-navigation/src/views/Header/Header.js");
 __d(/* react-navigation/src/views/Header/HeaderTitle.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -61227,7 +61575,7 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 exports.default = HeaderTitle;
-}, 517, null, "react-navigation/src/views/Header/HeaderTitle.js");
+}, 515, null, "react-navigation/src/views/Header/HeaderTitle.js");
 __d(/* react-navigation/src/views/Header/HeaderBackButton.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -61241,7 +61589,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TouchableItem = require(519               ); // 519 = ../TouchableItem
+var _TouchableItem = require(517               ); // 517 = ../TouchableItem
 
 var _TouchableItem2 = _interopRequireDefault(_TouchableItem);
 
@@ -61294,7 +61642,7 @@ var HeaderBackButton = function (_React$PureComponent) {
 
       var backButtonTitle = renderTruncated ? truncatedTitle : title;
 
-      var asset = require(520                      ); // 520 = ../assets/back-icon.png
+      var asset = require(518                      ); // 518 = ../assets/back-icon.png
 
       return _react2.default.createElement(
         _TouchableItem2.default,
@@ -61389,7 +61737,7 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 exports.default = HeaderBackButton;
-}, 518, null, "react-navigation/src/views/Header/HeaderBackButton.js");
+}, 516, null, "react-navigation/src/views/Header/HeaderBackButton.js");
 __d(/* react-navigation/src/views/TouchableItem.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -61502,9 +61850,9 @@ var TouchableItem = _wrapComponent('TouchableItem')((_temp = _class = function (
 }, _temp));
 
 exports.default = TouchableItem;
-}, 519, null, "react-navigation/src/views/TouchableItem.js");
+}, 517, null, "react-navigation/src/views/TouchableItem.js");
 __d(/* react-navigation/src/views/assets/back-icon.png */function(global, require, module, exports) {module.exports=require(324                                         ).registerAsset({"__packager_asset":true,"httpServerLocation":"/assets/node_modules/react-navigation/src/views/assets","width":13,"height":21,"scales":[1,1.5,2,3,4],"hash":"23ea5876dd37198284f126df9ba165c8","name":"back-icon","type":"png"}); // 324 = react-native/Libraries/Image/AssetRegistry
-}, 520, null, "react-navigation/src/views/assets/back-icon.png");
+}, 518, null, "react-navigation/src/views/assets/back-icon.png");
 __d(/* react-navigation/src/views/Header/HeaderStyleInterpolator.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -61561,7 +61909,7 @@ exports.default = {
   forCenter: forCenter,
   forRight: forRight
 };
-}, 521, null, "react-navigation/src/views/Header/HeaderStyleInterpolator.js");
+}, 519, null, "react-navigation/src/views/Header/HeaderStyleInterpolator.js");
 __d(/* react-navigation/src/views/withOrientation.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -61638,7 +61986,7 @@ exports.default = function (WrappedComponent) {
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _hoistNonReactStatics = require(523                      ); // 523 = hoist-non-react-statics
+var _hoistNonReactStatics = require(521                      ); // 521 = hoist-non-react-statics
 
 var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 
@@ -61675,7 +62023,7 @@ var isOrientationLandscape = exports.isOrientationLandscape = function isOrienta
       height = _ref.height;
   return width > height;
 };
-}, 522, null, "react-navigation/src/views/withOrientation.js");
+}, 520, null, "react-navigation/src/views/withOrientation.js");
 __d(/* hoist-non-react-statics/index.js */function(global, require, module, exports) {
 'use strict';
 
@@ -61738,7 +62086,7 @@ module.exports = function hoistNonReactStatics(targetComponent, sourceComponent,
 
     return targetComponent;
 };
-}, 523, null, "hoist-non-react-statics/index.js");
+}, 521, null, "hoist-non-react-statics/index.js");
 __d(/* react-navigation/src/views/SceneView.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -61802,7 +62150,7 @@ SceneView.childContextTypes = {
   navigation: _propTypes2.default.object.isRequired
 };
 exports.default = SceneView;
-}, 524, null, "react-navigation/src/views/SceneView.js");
+}, 522, null, "react-navigation/src/views/SceneView.js");
 __d(/* react-navigation/src/views/CardStack/TransitionConfigs.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -61811,7 +62159,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _CardStackStyleInterpolator = require(526                           ); // 526 = ./CardStackStyleInterpolator
+var _CardStackStyleInterpolator = require(524                           ); // 524 = ./CardStackStyleInterpolator
 
 var _CardStackStyleInterpolator2 = _interopRequireDefault(_CardStackStyleInterpolator);
 
@@ -61883,7 +62231,7 @@ exports.default = {
   defaultTransitionConfig: defaultTransitionConfig,
   getTransitionConfig: getTransitionConfig
 };
-}, 525, null, "react-navigation/src/views/CardStack/TransitionConfigs.js");
+}, 523, null, "react-navigation/src/views/CardStack/TransitionConfigs.js");
 __d(/* react-navigation/src/views/CardStack/CardStackStyleInterpolator.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -62008,7 +62356,7 @@ exports.default = {
   forFadeFromBottomAndroid: forFadeFromBottomAndroid,
   canUseNativeDriver: canUseNativeDriver
 };
-}, 526, null, "react-navigation/src/views/CardStack/CardStackStyleInterpolator.js");
+}, 524, null, "react-navigation/src/views/CardStack/CardStackStyleInterpolator.js");
 __d(/* react-navigation/src/views/Transitioner.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -62029,11 +62377,11 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _invariant = require(507                 ); // 507 = ../utils/invariant
+var _invariant = require(505                 ); // 505 = ../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _ScenesReducer = require(528              ); // 528 = ./ScenesReducer
+var _ScenesReducer = require(526              ); // 526 = ./ScenesReducer
 
 var _ScenesReducer2 = _interopRequireDefault(_ScenesReducer);
 
@@ -62284,7 +62632,7 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 exports.default = Transitioner;
-}, 527, null, "react-navigation/src/views/Transitioner.js");
+}, 525, null, "react-navigation/src/views/Transitioner.js");
 __d(/* react-navigation/src/views/ScenesReducer.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -62293,11 +62641,11 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 exports.default = ScenesReducer;
 
-var _invariant = require(507                 ); // 507 = ../utils/invariant
+var _invariant = require(505                 ); // 505 = ../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _shallowEqual = require(529                    ); // 529 = ../utils/shallowEqual
+var _shallowEqual = require(527                    ); // 527 = ../utils/shallowEqual
 
 var _shallowEqual2 = _interopRequireDefault(_shallowEqual);
 
@@ -62441,7 +62789,7 @@ function ScenesReducer(scenes, nextState, prevState) {
 
   return scenes;
 }
-}, 528, null, "react-navigation/src/views/ScenesReducer.js");
+}, 526, null, "react-navigation/src/views/ScenesReducer.js");
 __d(/* react-navigation/src/utils/shallowEqual.js */function(global, require, module, exports) {
 
 'use strict';
@@ -62481,7 +62829,7 @@ function shallowEqual(objA, objB) {
 }
 
 module.exports = shallowEqual;
-}, 529, null, "react-navigation/src/utils/shallowEqual.js");
+}, 527, null, "react-navigation/src/utils/shallowEqual.js");
 __d(/* react-navigation/src/routers/StackRouter.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -62490,31 +62838,31 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _pathToRegexp = require(531             ); // 531 = path-to-regexp
+var _pathToRegexp = require(529             ); // 529 = path-to-regexp
 
 var _pathToRegexp2 = _interopRequireDefault(_pathToRegexp);
 
-var _NavigationActions = require(504                   ); // 504 = ../NavigationActions
+var _NavigationActions = require(502                   ); // 502 = ../NavigationActions
 
 var _NavigationActions2 = _interopRequireDefault(_NavigationActions);
 
-var _createConfigGetter = require(533                   ); // 533 = ./createConfigGetter
+var _createConfigGetter = require(531                   ); // 531 = ./createConfigGetter
 
 var _createConfigGetter2 = _interopRequireDefault(_createConfigGetter);
 
-var _getScreenForRouteName = require(534                      ); // 534 = ./getScreenForRouteName
+var _getScreenForRouteName = require(532                      ); // 532 = ./getScreenForRouteName
 
 var _getScreenForRouteName2 = _interopRequireDefault(_getScreenForRouteName);
 
-var _StateUtils = require(506            ); // 506 = ../StateUtils
+var _StateUtils = require(504            ); // 504 = ../StateUtils
 
 var _StateUtils2 = _interopRequireDefault(_StateUtils);
 
-var _validateRouteConfigMap = require(536                       ); // 536 = ./validateRouteConfigMap
+var _validateRouteConfigMap = require(534                       ); // 534 = ./validateRouteConfigMap
 
 var _validateRouteConfigMap2 = _interopRequireDefault(_validateRouteConfigMap);
 
-var _getScreenConfigDeprecated = require(537                          ); // 537 = ./getScreenConfigDeprecated
+var _getScreenConfigDeprecated = require(535                          ); // 535 = ./getScreenConfigDeprecated
 
 var _getScreenConfigDeprecated2 = _interopRequireDefault(_getScreenConfigDeprecated);
 
@@ -62845,8 +63193,8 @@ exports.default = function (routeConfigs) {
     getScreenConfig: _getScreenConfigDeprecated2.default
   };
 };
-}, 530, null, "react-navigation/src/routers/StackRouter.js");
-__d(/* path-to-regexp/index.js */function(global, require, module, exports) {var isarray = require(532      ); // 532 = isarray
+}, 528, null, "react-navigation/src/routers/StackRouter.js");
+__d(/* path-to-regexp/index.js */function(global, require, module, exports) {var isarray = require(530      ); // 530 = isarray
 
 module.exports = pathToRegexp;
 module.exports.parse = parse;
@@ -63141,30 +63489,30 @@ function pathToRegexp(path, keys, options) {
 
   return stringToRegexp(path, keys, options);
 }
-}, 531, null, "path-to-regexp/index.js");
+}, 529, null, "path-to-regexp/index.js");
 __d(/* isarray/index.js */function(global, require, module, exports) {module.exports = Array.isArray || function (arr) {
   return Object.prototype.toString.call(arr) == '[object Array]';
 };
-}, 532, null, "isarray/index.js");
+}, 530, null, "isarray/index.js");
 __d(/* react-navigation/src/routers/createConfigGetter.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _invariant = require(507                 ); // 507 = ../utils/invariant
+var _invariant = require(505                 ); // 505 = ../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _getScreenForRouteName = require(534                      ); // 534 = ./getScreenForRouteName
+var _getScreenForRouteName = require(532                      ); // 532 = ./getScreenForRouteName
 
 var _getScreenForRouteName2 = _interopRequireDefault(_getScreenForRouteName);
 
-var _addNavigationHelpers = require(505                      ); // 505 = ../addNavigationHelpers
+var _addNavigationHelpers = require(503                      ); // 503 = ../addNavigationHelpers
 
 var _addNavigationHelpers2 = _interopRequireDefault(_addNavigationHelpers);
 
-var _validateScreenOptions = require(535                      ); // 535 = ./validateScreenOptions
+var _validateScreenOptions = require(533                      ); // 533 = ./validateScreenOptions
 
 var _validateScreenOptions2 = _interopRequireDefault(_validateScreenOptions);
 
@@ -63227,13 +63575,13 @@ exports.default = function (routeConfigs, navigatorScreenConfig) {
     return outputConfig;
   };
 };
-}, 533, null, "react-navigation/src/routers/createConfigGetter.js");
+}, 531, null, "react-navigation/src/routers/createConfigGetter.js");
 __d(/* react-navigation/src/routers/getScreenForRouteName.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.default = getScreenForRouteName;
 
-var _invariant = require(507                 ); // 507 = ../utils/invariant
+var _invariant = require(505                 ); // 505 = ../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
@@ -63260,7 +63608,7 @@ function getScreenForRouteName(routeConfigs, routeName) {
 
   throw new Error('Route ' + routeName + ' must define a screen or a getScreen.');
 }
-}, 534, null, "react-navigation/src/routers/getScreenForRouteName.js");
+}, 532, null, "react-navigation/src/routers/getScreenForRouteName.js");
 __d(/* react-navigation/src/routers/validateScreenOptions.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -63292,12 +63640,12 @@ exports.default = function (screenOptions, route) {
     })), ['}']).join('\n'));
   }
 };
-}, 535, null, "react-navigation/src/routers/validateScreenOptions.js");
+}, 533, null, "react-navigation/src/routers/validateScreenOptions.js");
 __d(/* react-navigation/src/routers/validateRouteConfigMap.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _invariant = require(507                 ); // 507 = ../utils/invariant
+var _invariant = require(505                 ); // 505 = ../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
@@ -63323,12 +63671,12 @@ function validateRouteConfigMap(routeConfigs) {
 }
 
 exports.default = validateRouteConfigMap;
-}, 536, null, "react-navigation/src/routers/validateRouteConfigMap.js");
+}, 534, null, "react-navigation/src/routers/validateRouteConfigMap.js");
 __d(/* react-navigation/src/routers/getScreenConfigDeprecated.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _invariant = require(507                 ); // 507 = ../utils/invariant
+var _invariant = require(505                 ); // 505 = ../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
@@ -63337,7 +63685,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 exports.default = function () {
   return (0, _invariant2.default)(false, '`getScreenConfig` has been replaced with `getScreenOptions`');
 };
-}, 537, null, "react-navigation/src/routers/getScreenConfigDeprecated.js");
+}, 535, null, "react-navigation/src/routers/getScreenConfigDeprecated.js");
 __d(/* react-navigation/src/navigators/NavigatorTypes.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -63352,7 +63700,7 @@ exports.default = {
   TABS: TABS,
   DRAWER: DRAWER
 };
-}, 538, null, "react-navigation/src/navigators/NavigatorTypes.js");
+}, 536, null, "react-navigation/src/navigators/NavigatorTypes.js");
 __d(/* react-navigation/src/navigators/TabNavigator.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -63366,31 +63714,31 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _createNavigator = require(508                ); // 508 = ./createNavigator
+var _createNavigator = require(506                ); // 506 = ./createNavigator
 
 var _createNavigator2 = _interopRequireDefault(_createNavigator);
 
-var _createNavigationContainer = require(502                           ); // 502 = ../createNavigationContainer
+var _createNavigationContainer = require(500                           ); // 500 = ../createNavigationContainer
 
 var _createNavigationContainer2 = _interopRequireDefault(_createNavigationContainer);
 
-var _TabRouter = require(540                   ); // 540 = ../routers/TabRouter
+var _TabRouter = require(538                   ); // 538 = ../routers/TabRouter
 
 var _TabRouter2 = _interopRequireDefault(_TabRouter);
 
-var _TabView = require(541                       ); // 541 = ../views/TabView/TabView
+var _TabView = require(539                       ); // 539 = ../views/TabView/TabView
 
 var _TabView2 = _interopRequireDefault(_TabView);
 
-var _TabBarTop = require(552                         ); // 552 = ../views/TabView/TabBarTop
+var _TabBarTop = require(550                         ); // 550 = ../views/TabView/TabBarTop
 
 var _TabBarTop2 = _interopRequireDefault(_TabBarTop);
 
-var _TabBarBottom = require(554                            ); // 554 = ../views/TabView/TabBarBottom
+var _TabBarBottom = require(552                            ); // 552 = ../views/TabView/TabBarBottom
 
 var _TabBarBottom2 = _interopRequireDefault(_TabBarBottom);
 
-var _NavigatorTypes = require(538               ); // 538 = ./NavigatorTypes
+var _NavigatorTypes = require(536               ); // 536 = ./NavigatorTypes
 
 var _NavigatorTypes2 = _interopRequireDefault(_NavigatorTypes);
 
@@ -63455,34 +63803,34 @@ TabNavigator.Presets = {
 };
 
 exports.default = TabNavigator;
-}, 539, null, "react-navigation/src/navigators/TabNavigator.js");
+}, 537, null, "react-navigation/src/navigators/TabNavigator.js");
 __d(/* react-navigation/src/routers/TabRouter.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _invariant = require(507                 ); // 507 = ../utils/invariant
+var _invariant = require(505                 ); // 505 = ../utils/invariant
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _getScreenForRouteName = require(534                      ); // 534 = ./getScreenForRouteName
+var _getScreenForRouteName = require(532                      ); // 532 = ./getScreenForRouteName
 
 var _getScreenForRouteName2 = _interopRequireDefault(_getScreenForRouteName);
 
-var _createConfigGetter = require(533                   ); // 533 = ./createConfigGetter
+var _createConfigGetter = require(531                   ); // 531 = ./createConfigGetter
 
 var _createConfigGetter2 = _interopRequireDefault(_createConfigGetter);
 
-var _NavigationActions = require(504                   ); // 504 = ../NavigationActions
+var _NavigationActions = require(502                   ); // 502 = ../NavigationActions
 
 var _NavigationActions2 = _interopRequireDefault(_NavigationActions);
 
-var _validateRouteConfigMap = require(536                       ); // 536 = ./validateRouteConfigMap
+var _validateRouteConfigMap = require(534                       ); // 534 = ./validateRouteConfigMap
 
 var _validateRouteConfigMap2 = _interopRequireDefault(_validateRouteConfigMap);
 
-var _getScreenConfigDeprecated = require(537                          ); // 537 = ./getScreenConfigDeprecated
+var _getScreenConfigDeprecated = require(535                          ); // 535 = ./getScreenConfigDeprecated
 
 var _getScreenConfigDeprecated2 = _interopRequireDefault(_getScreenConfigDeprecated);
 
@@ -63730,7 +64078,7 @@ exports.default = function (routeConfigs) {
     getScreenConfig: _getScreenConfigDeprecated2.default
   };
 };
-}, 540, null, "react-navigation/src/routers/TabRouter.js");
+}, 538, null, "react-navigation/src/routers/TabRouter.js");
 __d(/* react-navigation/src/views/TabView/TabView.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -63747,13 +64095,13 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _reactNativeTabView = require(542                    ); // 542 = react-native-tab-view
+var _reactNativeTabView = require(540                    ); // 540 = react-native-tab-view
 
-var _SceneView = require(524           ); // 524 = ../SceneView
+var _SceneView = require(522           ); // 522 = ../SceneView
 
 var _SceneView2 = _interopRequireDefault(_SceneView);
 
-var _withCachedChildNavigation = require(551                              ); // 551 = ../../withCachedChildNavigation
+var _withCachedChildNavigation = require(549                              ); // 549 = ../../withCachedChildNavigation
 
 var _withCachedChildNavigation2 = _interopRequireDefault(_withCachedChildNavigation);
 
@@ -63950,30 +64298,30 @@ var styles = _reactNative.StyleSheet.create({
     overflow: 'hidden'
   }
 });
-}, 541, null, "react-navigation/src/views/TabView/TabView.js");
+}, 539, null, "react-navigation/src/views/TabView/TabView.js");
 __d(/* react-native-tab-view/src/index.js */function(global, require, module, exports) {
 
 module.exports = {
   get TabViewAnimated() {
-    return require(543                ).default; // 543 = ./TabViewAnimated
+    return require(541                ).default; // 541 = ./TabViewAnimated
   },
   get TabViewPagerPan() {
-    return require(547                ).default; // 547 = ./TabViewPagerPan
+    return require(545                ).default; // 545 = ./TabViewPagerPan
   },
   get TabViewPagerScroll() {
-    return require(546                   ).default; // 546 = ./TabViewPagerScroll
+    return require(544                   ).default; // 544 = ./TabViewPagerScroll
   },
   get TabViewPagerAndroid() {
-    return require(545                    ).default; // 545 = ./TabViewPagerAndroid
+    return require(543                    ).default; // 543 = ./TabViewPagerAndroid
   },
   get TabBar() {
-    return require(548       ).default; // 548 = ./TabBar
+    return require(546       ).default; // 546 = ./TabBar
   },
   get SceneMap() {
-    return require(550         ).default; // 550 = ./SceneMap
+    return require(548         ).default; // 548 = ./SceneMap
   }
 };
-}, 542, null, "react-native-tab-view/src/index.js");
+}, 540, null, "react-native-tab-view/src/index.js");
 __d(/* react-native-tab-view/src/TabViewAnimated.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -63993,7 +64341,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TabViewPropTypes = require(544                 ); // 544 = ./TabViewPropTypes
+var _TabViewPropTypes = require(542                 ); // 542 = ./TabViewPropTypes
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64011,13 +64359,13 @@ var TabViewPager = void 0;
 
 switch (_reactNative.Platform.OS) {
   case 'android':
-    TabViewPager = require(545                    ).default; // 545 = ./TabViewPagerAndroid
+    TabViewPager = require(543                    ).default; // 543 = ./TabViewPagerAndroid
     break;
   case 'ios':
-    TabViewPager = require(546                   ).default; // 546 = ./TabViewPagerScroll
+    TabViewPager = require(544                   ).default; // 544 = ./TabViewPagerScroll
     break;
   default:
-    TabViewPager = require(547                ).default; // 547 = ./TabViewPagerPan
+    TabViewPager = require(545                ).default; // 545 = ./TabViewPagerPan
     break;
 }
 
@@ -64286,7 +64634,7 @@ var styles = _reactNative.StyleSheet.create({
     overflow: 'hidden'
   }
 });
-}, 543, null, "react-native-tab-view/src/TabViewAnimated.js");
+}, 541, null, "react-native-tab-view/src/TabViewAnimated.js");
 __d(/* react-native-tab-view/src/TabViewPropTypes.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -64322,7 +64670,7 @@ var SceneRendererPropType = exports.SceneRendererPropType = {
   getLastPosition: _propTypes2.default.func.isRequired,
   subscribe: _propTypes2.default.func.isRequired
 };
-}, 544, null, "react-native-tab-view/src/TabViewPropTypes.js");
+}, 542, null, "react-native-tab-view/src/TabViewPropTypes.js");
 __d(/* react-native-tab-view/src/TabViewPagerAndroid.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -64343,7 +64691,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TabViewPropTypes = require(544                 ); // 544 = ./TabViewPropTypes
+var _TabViewPropTypes = require(542                 ); // 542 = ./TabViewPropTypes
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64527,7 +64875,7 @@ var styles = _reactNative.StyleSheet.create({
     overflow: 'hidden'
   }
 });
-}, 545, null, "react-native-tab-view/src/TabViewPagerAndroid.js");
+}, 543, null, "react-native-tab-view/src/TabViewPagerAndroid.js");
 __d(/* react-native-tab-view/src/TabViewPagerScroll.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -64548,7 +64896,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TabViewPropTypes = require(544                 ); // 544 = ./TabViewPropTypes
+var _TabViewPropTypes = require(542                 ); // 542 = ./TabViewPropTypes
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64707,7 +65055,7 @@ var styles = _reactNative.StyleSheet.create({
     overflow: 'hidden'
   }
 });
-}, 546, null, "react-native-tab-view/src/TabViewPagerScroll.js");
+}, 544, null, "react-native-tab-view/src/TabViewPagerScroll.js");
 __d(/* react-native-tab-view/src/TabViewPagerPan.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -64727,7 +65075,7 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TabViewPropTypes = require(544                 ); // 544 = ./TabViewPropTypes
+var _TabViewPropTypes = require(542                 ); // 542 = ./TabViewPropTypes
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64990,7 +65338,7 @@ var styles = _reactNative.StyleSheet.create({
     alignItems: 'stretch'
   }
 });
-}, 547, null, "react-native-tab-view/src/TabViewPagerPan.js");
+}, 545, null, "react-native-tab-view/src/TabViewPagerPan.js");
 __d(/* react-native-tab-view/src/TabBar.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -65011,11 +65359,11 @@ var _propTypes2 = _interopRequireDefault(_propTypes);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TouchableItem = require(549              ); // 549 = ./TouchableItem
+var _TouchableItem = require(547              ); // 547 = ./TouchableItem
 
 var _TouchableItem2 = _interopRequireDefault(_TouchableItem);
 
-var _TabViewPropTypes = require(544                 ); // 544 = ./TabViewPropTypes
+var _TabViewPropTypes = require(542                 ); // 542 = ./TabViewPropTypes
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -65550,7 +65898,7 @@ var styles = _reactNative.StyleSheet.create({
     height: 2
   }
 });
-}, 548, null, "react-native-tab-view/src/TabBar.js");
+}, 546, null, "react-native-tab-view/src/TabBar.js");
 __d(/* react-native-tab-view/src/TouchableItem.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -65666,7 +66014,7 @@ TouchableItem.defaultProps = {
   pressColor: 'rgba(255, 255, 255, .4)'
 };
 exports.default = TouchableItem;
-}, 549, null, "react-native-tab-view/src/TouchableItem.js");
+}, 547, null, "react-native-tab-view/src/TouchableItem.js");
 __d(/* react-native-tab-view/src/SceneMap.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -65717,7 +66065,7 @@ function SceneMap(scenes) {
     });
   };
 }
-}, 550, null, "react-native-tab-view/src/SceneMap.js");
+}, 548, null, "react-native-tab-view/src/SceneMap.js");
 __d(/* react-navigation/src/withCachedChildNavigation.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -65733,7 +66081,7 @@ var _react = require(36     ); // 36 = react
 
 var _react2 = _interopRequireDefault(_react);
 
-var _addNavigationHelpers = require(505                     ); // 505 = ./addNavigationHelpers
+var _addNavigationHelpers = require(503                     ); // 503 = ./addNavigationHelpers
 
 var _addNavigationHelpers2 = _interopRequireDefault(_addNavigationHelpers);
 
@@ -65804,7 +66152,7 @@ function withCachedChildNavigation(Comp) {
     return _class;
   }(_react.PureComponent), _class.displayName = 'withCachedChildNavigation(' + (Comp.displayName || Comp.name) + ')', _temp2;
 }
-}, 551, null, "react-navigation/src/withCachedChildNavigation.js");
+}, 549, null, "react-navigation/src/withCachedChildNavigation.js");
 __d(/* react-navigation/src/views/TabView/TabBarTop.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -65820,9 +66168,9 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _reactNativeTabView = require(542                    ); // 542 = react-native-tab-view
+var _reactNativeTabView = require(540                    ); // 540 = react-native-tab-view
 
-var _TabBarIcon = require(553           ); // 553 = ./TabBarIcon
+var _TabBarIcon = require(551           ); // 551 = ./TabBarIcon
 
 var _TabBarIcon2 = _interopRequireDefault(_TabBarIcon);
 
@@ -65985,7 +66333,7 @@ var styles = _reactNative.StyleSheet.create({
     backgroundColor: 'transparent'
   }
 });
-}, 552, null, "react-navigation/src/views/TabView/TabBarTop.js");
+}, 550, null, "react-navigation/src/views/TabView/TabBarTop.js");
 __d(/* react-navigation/src/views/TabView/TabBarIcon.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -66104,7 +66452,7 @@ var styles = _reactNative.StyleSheet.create({
     justifyContent: 'center'
   }
 });
-}, 553, null, "react-navigation/src/views/TabView/TabBarIcon.js");
+}, 551, null, "react-navigation/src/views/TabView/TabBarIcon.js");
 __d(/* react-navigation/src/views/TabView/TabBarBottom.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -66120,11 +66468,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TabBarIcon = require(553           ); // 553 = ./TabBarIcon
+var _TabBarIcon = require(551           ); // 551 = ./TabBarIcon
 
 var _TabBarIcon2 = _interopRequireDefault(_TabBarIcon);
 
-var _withOrientation = require(522                 ); // 522 = ../withOrientation
+var _withOrientation = require(520                 ); // 520 = ../withOrientation
 
 var _withOrientation2 = _interopRequireDefault(_withOrientation);
 
@@ -66374,7 +66722,7 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 exports.default = (0, _withOrientation2.default)(TabBarBottom);
-}, 554, null, "react-navigation/src/views/TabView/TabBarBottom.js");
+}, 552, null, "react-navigation/src/views/TabView/TabBarBottom.js");
 __d(/* react-navigation/src/navigators/DrawerNavigator.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -66388,31 +66736,31 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _createNavigator = require(508                ); // 508 = ./createNavigator
+var _createNavigator = require(506                ); // 506 = ./createNavigator
 
 var _createNavigator2 = _interopRequireDefault(_createNavigator);
 
-var _createNavigationContainer = require(502                           ); // 502 = ../createNavigationContainer
+var _createNavigationContainer = require(500                           ); // 500 = ../createNavigationContainer
 
 var _createNavigationContainer2 = _interopRequireDefault(_createNavigationContainer);
 
-var _TabRouter = require(540                   ); // 540 = ../routers/TabRouter
+var _TabRouter = require(538                   ); // 538 = ../routers/TabRouter
 
 var _TabRouter2 = _interopRequireDefault(_TabRouter);
 
-var _DrawerScreen = require(556                           ); // 556 = ../views/Drawer/DrawerScreen
+var _DrawerScreen = require(554                           ); // 554 = ../views/Drawer/DrawerScreen
 
 var _DrawerScreen2 = _interopRequireDefault(_DrawerScreen);
 
-var _DrawerView = require(557                         ); // 557 = ../views/Drawer/DrawerView
+var _DrawerView = require(555                         ); // 555 = ../views/Drawer/DrawerView
 
 var _DrawerView2 = _interopRequireDefault(_DrawerView);
 
-var _DrawerNavigatorItems = require(562                                   ); // 562 = ../views/Drawer/DrawerNavigatorItems
+var _DrawerNavigatorItems = require(560                                   ); // 560 = ../views/Drawer/DrawerNavigatorItems
 
 var _DrawerNavigatorItems2 = _interopRequireDefault(_DrawerNavigatorItems);
 
-var _NavigatorTypes = require(538               ); // 538 = ./NavigatorTypes
+var _NavigatorTypes = require(536               ); // 536 = ./NavigatorTypes
 
 var _NavigatorTypes2 = _interopRequireDefault(_NavigatorTypes);
 
@@ -66494,7 +66842,7 @@ var DrawerNavigator = function DrawerNavigator(routeConfigs) {
 };
 
 exports.default = DrawerNavigator;
-}, 555, null, "react-navigation/src/navigators/DrawerNavigator.js");
+}, 553, null, "react-navigation/src/navigators/DrawerNavigator.js");
 __d(/* react-navigation/src/views/Drawer/DrawerScreen.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -66506,11 +66854,11 @@ var _react = require(36     ); // 36 = react
 
 var _react2 = _interopRequireDefault(_react);
 
-var _SceneView = require(524           ); // 524 = ../SceneView
+var _SceneView = require(522           ); // 522 = ../SceneView
 
 var _SceneView2 = _interopRequireDefault(_SceneView);
 
-var _withCachedChildNavigation = require(551                              ); // 551 = ../../withCachedChildNavigation
+var _withCachedChildNavigation = require(549                              ); // 549 = ../../withCachedChildNavigation
 
 var _withCachedChildNavigation2 = _interopRequireDefault(_withCachedChildNavigation);
 
@@ -66561,7 +66909,7 @@ var DrawerScreen = function (_PureComponent) {
 }(_react.PureComponent);
 
 exports.default = (0, _withCachedChildNavigation2.default)(DrawerScreen);
-}, 556, null, "react-navigation/src/views/Drawer/DrawerScreen.js");
+}, 554, null, "react-navigation/src/views/Drawer/DrawerScreen.js");
 __d(/* react-navigation/src/views/Drawer/DrawerView.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -66575,15 +66923,15 @@ var _react = require(36     ); // 36 = react
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactNativeDrawerLayoutPolyfill = require(558                                  ); // 558 = react-native-drawer-layout-polyfill
+var _reactNativeDrawerLayoutPolyfill = require(556                                  ); // 556 = react-native-drawer-layout-polyfill
 
 var _reactNativeDrawerLayoutPolyfill2 = _interopRequireDefault(_reactNativeDrawerLayoutPolyfill);
 
-var _addNavigationHelpers = require(505                         ); // 505 = ../../addNavigationHelpers
+var _addNavigationHelpers = require(503                         ); // 503 = ../../addNavigationHelpers
 
 var _addNavigationHelpers2 = _interopRequireDefault(_addNavigationHelpers);
 
-var _DrawerSidebar = require(561              ); // 561 = ./DrawerSidebar
+var _DrawerSidebar = require(559              ); // 559 = ./DrawerSidebar
 
 var _DrawerSidebar2 = _interopRequireDefault(_DrawerSidebar);
 
@@ -66734,11 +67082,11 @@ var DrawerView = function (_PureComponent) {
 }(_react.PureComponent);
 
 exports.default = DrawerView;
-}, 557, null, "react-navigation/src/views/Drawer/DrawerView.js");
-__d(/* react-native-drawer-layout-polyfill/dist/index.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", { value: true });var _reactNativeDrawerLayout = require(559                         );var _reactNativeDrawerLayout2 = _interopRequireDefault(_reactNativeDrawerLayout);function _interopRequireDefault(obj) { // 559 = react-native-drawer-layout
+}, 555, null, "react-navigation/src/views/Drawer/DrawerView.js");
+__d(/* react-native-drawer-layout-polyfill/dist/index.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", { value: true });var _reactNativeDrawerLayout = require(557                         );var _reactNativeDrawerLayout2 = _interopRequireDefault(_reactNativeDrawerLayout);function _interopRequireDefault(obj) { // 557 = react-native-drawer-layout
   return obj && obj.__esModule ? obj : { default: obj };
 }exports.default = _reactNativeDrawerLayout2.default;
-}, 558, null, "react-native-drawer-layout-polyfill/dist/index.js");
+}, 556, null, "react-native-drawer-layout-polyfill/dist/index.js");
 __d(/* react-native-drawer-layout/dist/DrawerLayout.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", { value: true });exports.default = undefined;var _extends = Object.assign || function (target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = arguments[i];for (var key in source) {
@@ -66757,7 +67105,7 @@ __d(/* react-native-drawer-layout/dist/DrawerLayout.js */function(global, requir
   };
 }();var _class, _temp;
 var _react = require(36     );var _react2 = _interopRequireDefault(_react); // 36 = react
-var _reactNativeDismissKeyboard = require(560                            );var _reactNativeDismissKeyboard2 = _interopRequireDefault(_reactNativeDismissKeyboard); // 560 = react-native-dismiss-keyboard
+var _reactNativeDismissKeyboard = require(558                            );var _reactNativeDismissKeyboard2 = _interopRequireDefault(_reactNativeDismissKeyboard); // 558 = react-native-dismiss-keyboard
 var _reactNative = require(12            );function _interopRequireDefault(obj) { // 12 = react-native
   return obj && obj.__esModule ? obj : { default: obj };
 }function _classCallCheck(instance, Constructor) {
@@ -66980,7 +67328,7 @@ var styles = _reactNative.StyleSheet.create({
     bottom: 0,
     right: 0,
     zIndex: 1000 } });
-}, 559, null, "react-native-drawer-layout/dist/DrawerLayout.js");
+}, 557, null, "react-native-drawer-layout/dist/DrawerLayout.js");
 __d(/* react-native-dismiss-keyboard/dist/index.js */function(global, require, module, exports) {Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -66995,7 +67343,7 @@ function dismissKeyboard() {
 }
 
 module.exports = exports.default;
-}, 560, null, "react-native-dismiss-keyboard/dist/index.js");
+}, 558, null, "react-native-dismiss-keyboard/dist/index.js");
 __d(/* react-navigation/src/views/Drawer/DrawerSidebar.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -67011,11 +67359,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _withCachedChildNavigation = require(551                              ); // 551 = ../../withCachedChildNavigation
+var _withCachedChildNavigation = require(549                              ); // 549 = ../../withCachedChildNavigation
 
 var _withCachedChildNavigation2 = _interopRequireDefault(_withCachedChildNavigation);
 
-var _NavigationActions = require(504                      ); // 504 = ../../NavigationActions
+var _NavigationActions = require(502                      ); // 502 = ../../NavigationActions
 
 var _NavigationActions2 = _interopRequireDefault(_NavigationActions);
 
@@ -67139,7 +67487,7 @@ var styles = _reactNative.StyleSheet.create({
     flex: 1
   }
 });
-}, 561, null, "react-navigation/src/views/Drawer/DrawerSidebar.js");
+}, 559, null, "react-navigation/src/views/Drawer/DrawerSidebar.js");
 __d(/* react-navigation/src/views/Drawer/DrawerNavigatorItems.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -67151,7 +67499,7 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require(12            ); // 12 = react-native
 
-var _TouchableItem = require(519               ); // 519 = ../TouchableItem
+var _TouchableItem = require(517               ); // 517 = ../TouchableItem
 
 var _TouchableItem2 = _interopRequireDefault(_TouchableItem);
 
@@ -67261,7 +67609,7 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 exports.default = DrawerNavigatorItems;
-}, 562, null, "react-navigation/src/views/Drawer/DrawerNavigatorItems.js");
+}, 560, null, "react-navigation/src/views/Drawer/DrawerNavigatorItems.js");
 __d(/* react-navigation/src/views/withNavigation.js */function(global, require, module, exports) {Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -67279,7 +67627,7 @@ var _propTypes = require(127         ); // 127 = prop-types
 
 var _propTypes2 = _interopRequireDefault(_propTypes);
 
-var _hoistNonReactStatics = require(523                      ); // 523 = hoist-non-react-statics
+var _hoistNonReactStatics = require(521                      ); // 521 = hoist-non-react-statics
 
 var _hoistNonReactStatics2 = _interopRequireDefault(_hoistNonReactStatics);
 
@@ -67303,7 +67651,7 @@ function withNavigation(Component) {
 
   return (0, _hoistNonReactStatics2.default)(componentWithNavigation, Component);
 }
-}, 563, null, "react-navigation/src/views/withNavigation.js");
+}, 561, null, "react-navigation/src/views/withNavigation.js");
 ;require(55);
 ;require(0);
 //# sourceMappingURL=index.map

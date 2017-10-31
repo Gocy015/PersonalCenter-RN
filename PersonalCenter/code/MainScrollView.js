@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import UserInfoCell from './UserInfoCell'
+import DailyMissionCell from './DailyMissionCell'
 
 const Dimensions = require('Dimensions');
 var appWindow = Dimensions.get('window');
@@ -28,16 +29,19 @@ const itemSpacing = 0;
 const itemPerRow = 3;
 const itemWidth = appWindow.width / itemPerRow - itemPerRow * itemSpacing;
 const itemHeight = 100;
+const userInfoHeight = 166;
+const dailyMissionHeight = 60;
 class GridView extends Component {
 
     initState() {
         var ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
         var data = [];
-        for (var index = 0; index < 10; index++) {
-            data.push("Cell : " + index);
+        data.push('User Info Cell');//user info cell
+        data.push('Daily Mission Cell');
+        for (var index = 0; index <= 10; index++) {
+            data.push("Cell " + index); // normal info cells
         }
-
         this.state = {
             dataSource: ds.cloneWithRows(data),
         };
@@ -54,8 +58,9 @@ class GridView extends Component {
 
     render() {
         // var { height } = Dimensions.get(this);
-        var rows = Math.ceil(appWindow.height / (itemHeight + itemSpacing));
-        var initialSize = Math.min(rows * itemPerRow, this.dataArray.length);
+        // 没把navigation算进去，还是有点问题
+        var rows = Math.ceil((appWindow.height - userInfoHeight) / (itemHeight + itemSpacing));
+        var initialSize = 1 + Math.min(rows * itemPerRow, this.dataArray.length);
         console.log('calculated rows : ' + rows + ',items : ' + rows * itemPerRow + ',final initial size : ', initialSize);
         return (
             // ListView wraps ScrollView and so takes on its properties. 
@@ -64,45 +69,61 @@ class GridView extends Component {
             <ListView contentContainerStyle={styles.list}
                 initialListSize={initialSize}
                 dataSource={this.state.dataSource}
-                renderRow={this._renderRow.bind(this)}
+                renderRow={this._renderItem.bind(this)}
             />
         );
     }
 
-    _renderRow(rowData, sectionID, rowID) {
-        var rowNum = parseInt(rowID);
+    _renderItem(itemData, sectionID, itemID) {
+        const imageUris = [
+            'https://cdn3.iconfinder.com/data/icons/video-game-consoles-and-controllers/288/ps4_controller-01-512.png',
+            'https://d30y9cdsu7xlg0.cloudfront.net/png/194080-200.png',
+            'https://cdn2.iconfinder.com/data/icons/game-device-5/512/xone_controller_gray-512.png'
+        ];
+        var itemNum = parseInt(itemID);
         var imgSource = {
-            uri: THUMB_URLS[rowNum % THUMB_URLS.length],
-        };
+            uri: imageUris[itemNum % imageUris.length]
+        }
+
         var self = this;
-        if (rowNum == 0) {
+        if (itemNum == 0) {
             return (
                 <View style={styles.userCell}>
-                    <UserInfoCell headerUrl={require("../resources/header.png")}  userName="Gocy"/>
+                    <UserInfoCell headerUrl={require("../resources/header.png")} userName="Gocy" />
+                </View>
+            );
+        }
+        if (itemNum == 1) {
+            return (
+                <View style={styles.dailyMissionCell}>
+                    <DailyMissionCell missions={[
+                        { name: '日常任务', progress: 0.3 },
+                        { name: '月度壕友成就', progress: 0.0 },
+                        { name: '刷飞机才是壕', progress: 0.9 },
+                    ]} />
                 </View>
             );
         }
         return (
-            <TouchableHighlight onPress={() => self._pressRow(rowID)} underlayColor='rgba(0,0,0,0)' >
+            <TouchableHighlight onPress={() => self._pressItem(itemID)} underlayColor='rgba(0,0,0,0)' >
                 <View>
                     <View style={styles.infoCell}>
                         <Image style={styles.thumb} source={imgSource} />
                         <Text style={styles.text}>
-                            {rowData}
+                            {itemData}
                         </Text>
                     </View>
                 </View>
             </TouchableHighlight >
         );
     }
-    _pressRow(rowID) {
-        var row = parseInt(rowID)
-        if (row >= this.dataArray.length) {
+    _pressItem(itemID) {
+        var item = parseInt(itemID)
+        if (item >= this.dataArray.length) {
             return;
         }
 
-        this.dataArray[row] = this.dataArray[row] + 'x';
-        this._reloadData();
+        console.log('Item ' + item + ' pressd ,data : ' + this.dataArray[item]);
     }
 
     _reloadData() {
@@ -117,8 +138,6 @@ class GridView extends Component {
     }
 }
 
-var THUMB_URLS = ['https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1509693364&di=aa4202ac0272647cdcc9bd35aebc260e&imgtype=jpg&er=1&src=http%3A%2F%2Fimg1.gamersky.com%2Fimage2017%2F04%2F20170422_xdj_187_7%2Fimage002.jpg'];
-
 var styles = StyleSheet.create({
     list: {
         justifyContent: 'flex-start',
@@ -127,7 +146,14 @@ var styles = StyleSheet.create({
     },
     userCell: {
         width: appWindow.width,
+        height: userInfoHeight,
         marginBottom: 6
+    },
+    dailyMissionCell: {
+        width: appWindow.width,
+        height: dailyMissionHeight,
+        marginBottom: 6,
+        backgroundColor: '#F6F6F6',
     },
     infoCell: {
         justifyContent: 'center',
